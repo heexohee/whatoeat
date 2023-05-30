@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="kor">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" content="머먹머먹" />
+  <meta property="og:description" content="음식...좋아하세요?" />
+  <meta property="og:image" content="JSH.png" />
+  <title>머먹머먹 - 오늘 뭘먹지?</title>
+
+
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+    * {
+      font-family: "Pretendard", serif;
+    }
+
+    body {
+      background-image: url('/Users/jeongsohee/Desktop/whattoeat/backgroundimage/img5.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-position: center center;
+      background-size: cover;h
+    }
+
+  
+    .hero {
+      background-color: #cccccc7e;
+      text-align: left;
+      padding: 25px 10px 10px 20px;
+    }
+
+    .main {
+      font-size: 40px;
+      color: #9386ec;
+    }
+
+    .engname {
+      font-size: 20px;
+    }
+
+    .sub {
+      font-size: 16px;
+    }
+
+    /* 모바일 화면에서는 가운데 정렬로 유지 */
+    @media (max-width: 768px) {
+      .hero {
+        text-align: center;
+      }
+    }
+
+    .wrap {
+      width: 350px;
+      margin: 80px 0px 0px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+    }
+
+    @media screen and (max-width: 767px) {
+      .wrap {
+        width: 350px;
+        margin: 40px auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+
+    .wrap>a {
+      width: 250px;
+      height: 50px;
+      background-color: whitesmoke;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #9386ec;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+
+
+    }
+
+    .wrap>a:hover {
+      background-color: rgb(234, 234, 234);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 20% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+    }
+
+    .modal-content h2 {
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: bold;
+      color: #454545;
+    }
+
+    .modal-content form {
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      justify-content: left;
+    }
+
+    .modal-content form label {
+      margin-bottom: 8px;
+    }
+
+    .modal-content button {
+      background-color: #9386ec;
+      border: none;
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 15px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .modal-content button:hover {
+      background-color: #ff89a2;
+    }
+
+    @media screen and (max-width: 600px) {
+      .modal-content {
+        width: 95%;
+        max-width: none;
+        margin: 65% auto;
+      }
+    }
+
+    .form-wrapper {
+  width: 50%;
+  float: left;
+}
+
+.form-display {
+  width: 50%;
+  float: right;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.form-content {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+
+    footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: #b9b9b96e;
+      color: hsl(0, 0%, 96%);
+      text-align: center;
+      padding: 2px;
+
+    }
+
+    @media (max-width: 767px) {
+      footer {
+        font-size: 12px;
+        padding: 0px;
+      }
+    }
+    #modal-result {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#modal-result h2 {
+  font-size: 18px;
+ 
+
+  </style>
+
+<!--요기까지 스타일-->
+
+</head>
+
+<body>
+       <!--배경 이미지 랜덤 잠궈둠--> 
+  <!---
+      <script>
+        // 이미지 경로를 배열로 정의합니다.
+        var images = ['p/Users/jeongsohee/Desktop/whattoeat/backgroundimage/img1.jpg', '/Users/jeongsohee/Desktop/whattoeat/backgroundimage/img2.jpg', '/Users/jeongsohee/Desktop/whattoeat/backgroundimage/img3.jpg','/Users/jeongsohee/Desktop/whattoeat/backgroundimage/img5.jpg','/Users/jeongsohee/Desktop/whattoeat/backgroundimage/img7.jpg'];
+    
+        // 랜덤한 이미지 경로를 선택합니다.
+        var randomIndex = Math.floor(Math.random() * images.length);
+        var randomImage = images[randomIndex];
+    
+        // body의 백그라운드 이미지를 랜덤한 이미지로 설정합니다.
+        document.body.style.backgroundImage = 'url(' + randomImage + ')';
+      </script>
+    -->
+  <div class="hero bg-dark text-center py-5">
+    <h1 class="main">머먹머먹?!</h1>
+    <h2 class="engname">무엇을 먹을지 고민하는 사람들을 위한 서비스!</h2>
+    <p class="sub">여럿이서 무슨 음식을 먹어야 할지 고민이세요? <br>머먹머먹은 오늘의 메뉴를 제안해드립니다! </p>
+  </div>
+
+  <div class="wrap">
+
+    <a id="headcount-btn" href="#">인원 설정</a>
+    <a id="foodtype-btn" href="#">음식 종류 설정</a>
+    <a id="allergy-btn" href="#">알러지/기호 설정</a>
+    <a id="already-btn" href="#">이미 먹었어요!(추천제외기능)</a>
+  </div>
+
+
+  <!-- 인원수 설정-->
+  <script>
+    const btnHeadcount = document.getElementById('headcount-btn');
+    let numGuest = 0;
+
+    btnHeadcount.addEventListener('click', () => {
+      const input = prompt('몇 명이서 식사하시나요? (1-6명)');
+      const num = parseInt(input);
+
+      if (isNaN(num) || num < 1 || num > 6) {
+        alert('1에서 6사이의 숫자를 입력해주세요.');
+      } else {
+        numGuest = num;
+        alert(`${numGuest}명이 설정되었습니다.`);
+      }
+    });
+
+  </script>
+  <!-- 음식 종류 모달 -->
+  <div class="modal" id="foodtype-modal">
+    <div class="modal-content">
+      <h2>먹고싶은 음식 종류를 선택해 주세요!</h2>
+      <form>
+        <label><input type="checkbox" value="korean">한식</label>
+        <label><input type="checkbox" value="japanese">일식</label>
+        <label><input type="checkbox" value="chinese">중식</label>
+        <label><input type="checkbox" value="western">양식</label>
+      </form>
+      <button id="close-modal-btn">닫기</button>
+      <button id="close2-modal-btn">선택완료</button>
+    </div>
+  </div>
+
+
+
+  <script>
+    // 모달 열기 버튼 클릭 이벤트
+    document.getElementById("foodtype-btn").addEventListener("click", function () {
+      // 모달 열기
+      document.getElementById("foodtype-modal").style.display = "block";
+    });
+
+    // 모달 닫기 버튼 클릭 이벤트
+    document.getElementById("close-modal-btn").addEventListener("click", function () {
+      // 모달 닫기
+      document.getElementById("foodtype-modal").style.display = "none";
+
+    });
+    document.getElementById("close2-modal-btn").addEventListener("click", function () {
+      // 선택 완료
+      document.getElementById("foodtype-modal").style.display = "none";
+
+    });
+
+    // 체크박스 클릭 이벤트
+    var checkboxes = document.querySelectorAll("#foodtype-modal input[type='checkbox']");
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("click", function () {
+        if (this.checked) {
+          this.setAttribute("checked", "");
+        } else {
+          this.removeAttribute("checked");
+        }
+      });
+    });
+  </script>
+
+
+  <!-- 알러지 / 기호 모달 -->
+  <div class="modal" id="allergy-modal">
+    <div class="modal-content">
+      <h2>알러지가 있거나 먹기 싫은 음식을 알려주세요.</h2>
+      <p>선택한 항목이 포함된 음식은 추천에서 제외됩니다.</p>
+      <p>이 서비스에서 제공되는 정보는 정확하지 않을 수 있으므로 심각한 알러지나 질병 우려가 있을 경우 반드시 의사와 상의하세요.</p>
+      <form>
+        <label><input type="checkbox" value="goosoo">고수</label>
+        <label><input type="checkbox" value="ddangkong">땅콩</label>
+        <label><input type="checkbox" value="peaches">복숭아</label>
+        <label><input type="checkbox" value="porks">돼지고기</label>
+        <label><input type="checkbox" value="chicken">닭고기</label>
+        <label><input type="checkbox" value="chicken">게</label>
+        <label><input type="checkbox" value="chicken">새우</label>
+      </form>
+      <button id="close3-modal-btn">닫기</button>
+      <button id="close4-modal-btn">선택완료</button>
+    </div>
+  </div>
+
+  <script>
+    // 모달 열기 버튼 클릭 이벤트
+    document.getElementById("allergy-btn").addEventListener("click", function () {
+      // 모달 열기
+      document.getElementById("allergy-modal").style.display = "block";
+    });
+
+    // 모달 닫기 버튼 클릭 이벤트
+    document.getElementById("close3-modal-btn").addEventListener("click", function () {
+      // 모달 닫기
+      document.getElementById("allergy-modal").style.display = "none";
+
+    });
+    document.getElementById("close4-modal-btn").addEventListener("click", function () {
+      // 선택 완료
+      document.getElementById("allergy-modal").style.display = "none";
+
+    });
+
+    // 체크박스 클릭 이벤트
+    var checkboxes = document.querySelectorAll("#foodtype-modal input[type='checkbox']");
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("click", function () {
+        if (this.checked) {
+          this.setAttribute("checked", "");
+        } else {
+          this.removeAttribute("checked");
+        }
+      });
+    });
+  </script>
+  <!-- 
+// 선택된 음식 종류 가져오기
+var selectedFoodTypes = [];
+checkboxes.forEach(function(checkbox) {
+  if (checkbox.checked) {
+    selectedFoodTypes.push(checkbox.value);
+  }
+});
+
+// 선택된 음식 종류 콘솔에 출력
+console.log(selectedFoodTypes);
+-->
+
+<div id="modal-result">
+  <h2>인원 수: <span id="num-people"></span></h2>
+  <h2>음식 종류: <span id="food-type"></span></h2>
+  <h2>빼주세요!: <span id="no-ingredients"></span></h2>
+  <h2>이미 먹었어요: <span id="already-ate"></span></h2>
+</div>
+
+<script>
+  // 'Save' 버튼을 눌렀을 때 실행되는 함수
+function saveModal() {
+  // 인원 수 입력값 받아오기
+  const numPeople = document.getElementById('numPeople').value;
+  // 음식 종류 입력값 받아오기
+  const foodType = document.getElementById('foodType').value;
+  // 빼주세요! 체크박스 값 받아오기
+  const noIngredients = document.getElementById('noIngredients').checked;
+  // 이미 먹었어요 체크박스 값 받아오기
+  const alreadyAte = document.getElementById('alreadyAte').checked;
+
+  // 받아온 값 span 태그에 채워주기
+  document.getElementById('num-people').innerHTML = numPeople;
+  document.getElementById('food-type').innerHTML = foodType;
+  document.getElementById('no-ingredients').innerHTML = noIngredients ? '빼주세요!' : '빼지 않아도 돼요';
+  document.getElementById('already-ate').innerHTML = alreadyAte ? '이미 먹었어요' : '아직 안 먹었어요';
+
+  // 모달 닫기
+  modal.style.display = 'none';
+}
+
+</script>
+  <footer>
+    <p>Copyright & copy : 2023 whattoeat</p>
+    <p>Contact : rsoy2918@gmail.com | Designer & Developer : SoHee</p>
+
+  </footer>
+</body>
+
+</html>
+}
